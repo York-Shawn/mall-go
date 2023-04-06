@@ -8,6 +8,8 @@ import (
 	"mall/models/web"
 	"strconv"
 	"strings"
+
+	"gorm.io/gorm"
 )
 
 type WebOrderService struct {
@@ -61,11 +63,9 @@ func (o *WebOrderService) GetList(param web.OrderListParam) ([]web.OrderList, in
 // 获取订单详情
 func (o *WebOrderService) GetDetail(param web.OrderDetailParam) (od web.OrderDetail) {
 	var order web.Order
-	var address web.Address
 
 	// 查询订单信息与地址信息
 	global.Db.First(&order, param.Id)
-	global.Db.First(&address, order.AddressId)
 
 	// 查询商品信息
 	goodsIds := make([]uint, 0)
@@ -99,12 +99,12 @@ func (o *WebOrderService) GetDetail(param web.OrderDetailParam) (od web.OrderDet
 		Status:          order.Status,
 		TotalPrice:      order.TotalPrice,
 		GoodsItem:       goodsItem,
-		Name:            address.Name,
-		Mobile:          address.Mobile,
-		Province:        address.Province,
-		City:            address.City,
-		District:        address.District,
-		DetailedAddress: address.DetailedAddress,
+		Name:            order.Name,
+		Mobile:          order.Mobile,
+		Province:        order.Province,
+		City:            order.City,
+		District:        order.District,
+		DetailedAddress: order.DetailedAddress,
 		Created:         order.Created,
 	}
 	return orderDetail
@@ -147,6 +147,7 @@ func (o *AppOrderService) Submit(param app.OrderSubmitParam) int64 {
 	goods := make([]string, 0)
 	for _, item := range cartInfo.CartItem {
 		idAndCount := fmt.Sprintf("%s:%d", strconv.Itoa(int(item.Id)), idsAndCounts[item.Id])
+		global.Db.Model(&app.Goods{}).Where("id = ?", item.Id).Update("sales", gorm.Expr("sales + ?", idsAndCounts[item.Id]))
 		goods = append(goods, idAndCount)
 	}
 	order := app.Order{

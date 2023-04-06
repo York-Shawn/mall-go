@@ -4,16 +4,21 @@ import "mall/models"
 
 // 数据库，订单数据映射模型
 type Order struct {
-	Id            uint64  `gorm:"primaryKey"`
-	OpenId        string  `gorm:"open_id"`
-	GoodsIdsCount string  `gorm:"goods_ids_count"`
-	GoodsCount    uint    `gorm:"goods_count"`
-	TotalPrice    float64 `gorm:"total_price"`
-	AddressId     uint64  `gorm:"address_id"`
-	Status        int     `gorm:"status"` // 订单状态，1-待付款，2-已取消，3-已付款，4-配送中，5-已完成
-	Created       string  `gorm:"created"`
-	Updated       string  `gorm:"updated"`
-	Sid           uint64  `gorm:"sid"` // 店铺编号
+	Id              uint64  `gorm:"primaryKey"`
+	OpenId          string  `gorm:"open_id"`
+	GoodsIdsCount   string  `gorm:"goods_ids_count"`
+	GoodsCount      uint    `gorm:"goods_count"`
+	TotalPrice      float64 `gorm:"total_price"`
+	Status          int     `gorm:"status"` // 订单状态，1-待付款，2-已取消，3-已付款，4-配送中，5-已完成
+	Created         string  `gorm:"created"`
+	Updated         string  `gorm:"updated"`
+	Sid             uint64  `gorm:"sid"` // 店铺编号
+	Name            string  `gorm:"name"`
+	Mobile          string  `gorm:"mobile"`
+	Province        string  `gorm:"province"`
+	City            string  `gorm:"city"`
+	District        string  `gorm:"district"`
+	DetailedAddress string  `gorm:"detailed_address"`
 }
 
 // 订单删除参数模型
