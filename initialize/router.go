@@ -110,6 +110,7 @@ func Router() {
 
 		// 商品分类
 		app.GET("/category/option", api.GetAppCategory().GetCategoryOption)
+		app.POST("/feedback/submit", api.GetAppFeedback().SendFeedback)
 	}
 
 	// 启动、监听端口

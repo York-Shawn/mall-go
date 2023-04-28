@@ -1,9 +1,9 @@
 package initialize
 
-func Run()  {
+func Run() {
 	LoadConfig()
 	Mysql()
 	Redis()
-	go Cron()
+	// go Cron()
 	Router()
 }
