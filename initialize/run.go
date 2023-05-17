@@ -5,5 +5,6 @@ func Run() {
 	Mysql()
 	Redis()
 	// go Cron()
+	go SaleWatcher()
 	Router()
 }

@@ -1,6 +1,8 @@
 package initialize
 
 import (
+	"crypto/tls"
+	"fmt"
 	"mall/common"
 	"mall/global"
 	"mall/models/app"
@@ -8,6 +10,8 @@ import (
 	"mall/service"
 	"math/rand"
 	"time"
+
+	"gopkg.in/gomail.v2"
 )
 
 // 定时任务
@@ -60,5 +64,41 @@ func Cron() {
 			Updated: common.NowTime(),
 		}
 		global.Db.Model(&order).Where("id IN ?", orderId[oc-3:oc]).Updates(order)
+	}
+}
+
+func SaleWatcher() {
+	ticker := time.NewTicker(600 * time.Second)
+	var goods []web.Goods
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ticker.C:
+			fmt.Println("库存监控")
+			global.Db.Model(&goods).Where("status = ?", 1).Where("quantity < ?", 10).Find(&goods)
+			if len(goods) > 0 {
+				goodsName := ""
+				for _, v := range goods {
+					goodsName += v.Name + " "
+				}
+				smtp := global.Config.Feedback.QqSmtp
+				email := global.Config.Feedback.QqEmail
+				secret := global.Config.Feedback.QqEmailSecret
+				m := gomail.NewMessage()
+				m.SetHeader("From", email)                          // 发件人
+				m.SetHeader("To", email)                            // 收件人，可以多个收件人，但必须使用相同的 SMTP 连接
+				m.SetHeader("Cc", email)                            // 抄送，可以多个
+				m.SetHeader("Bcc", email)                           // 暗送，可以多个
+				m.SetHeader("Subject", "商城后台-问题反馈")                 // 邮件主题
+				m.SetBody("text/html", "商品"+goodsName+"库存不足，请及时补充") // 邮件正文
+				d := gomail.NewDialer(smtp, 25, email, secret)
+				// 关闭SSL协议认证
+				d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+				if err := d.DialAndSend(m); err != nil {
+					fmt.Println("发送失败", err)
+				}
+			}
+
+		}
 	}
 }

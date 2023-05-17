@@ -147,7 +147,7 @@ func (o *AppOrderService) Submit(param app.OrderSubmitParam) int64 {
 	goods := make([]string, 0)
 	for _, item := range cartInfo.CartItem {
 		idAndCount := fmt.Sprintf("%s:%d", strconv.Itoa(int(item.Id)), idsAndCounts[item.Id])
-		global.Db.Model(&app.Goods{}).Where("id = ?", item.Id).Update("sales", gorm.Expr("sales + ?", idsAndCounts[item.Id]))
+		global.Db.Model(&app.Goods{}).Where("id = ?", item.Id).Update("sales", gorm.Expr("sales + ?", idsAndCounts[item.Id])).Update("quantity", gorm.Expr("quantity - ?", idsAndCounts[item.Id]))
 		goods = append(goods, idAndCount)
 	}
 	order := app.Order{

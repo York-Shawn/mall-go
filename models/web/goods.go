@@ -9,7 +9,7 @@ type Goods struct {
 	Title      string  `gorm:"title"`       // 商品标题
 	Name       string  `gorm:"name"`        // 商品名称
 	Price      float64 `gorm:"price"`       // 商品价格
-	Quantity   uint    `gorm:"quantity"`    // 商品数量
+	Quantity   int     `gorm:"quantity"`    // 商品数量
 	ImageUrl   string  `gorm:"image_url"`   // 商品图片
 	Remark     string  `gorm:"remark"`      // 商品备注
 	Sales      uint    `gorm:"sales"`       // 商品销量
@@ -25,7 +25,7 @@ type GoodsCreateParam struct {
 	Title      string  `json:"title" binding:"required"`
 	Name       string  `json:"name" binding:"required"`
 	Price      float64 `json:"price" binding:"required,gt=0"`
-	Quantity   uint    `json:"quantity" binding:"required,gt=0"`
+	Quantity   int     `json:"quantity" binding:"required,gt=0"`
 	ImageUrl   string  `json:"imageUrl" binding:"required"`
 	Remark     string  `json:"remark"`
 	Sid        uint64  `json:"sid" binding:"required,gt=0"`
@@ -43,7 +43,7 @@ type GoodsUpdateParam struct {
 	Title      string  `json:"title" binding:"required"`
 	Name       string  `json:"name" binding:"required"`
 	Price      float64 `json:"price" binding:"required,gt=0"`
-	Quantity   uint    `json:"quantity" binding:"required,gt=0"`
+	Quantity   int     `json:"quantity" binding:"required,gt=0"`
 	ImageUrl   string  `json:"imageUrl" binding:"required"`
 	Remark     string  `json:"remark"`
 }
@@ -71,7 +71,7 @@ type GoodsList struct {
 	Title      string  `json:"title"`
 	Name       string  `json:"name"`
 	Price      float64 `json:"price"`
-	Quantity   uint    `json:"quantity"`
+	Quantity   int     `json:"quantity"`
 	ImageUrl   string  `json:"imageUrl"`
 	Remark     string  `json:"remark"`
 	Sales      uint    `json:"sales"`

@@ -7,7 +7,7 @@ type Goods struct {
 	Title      string  `gorm:"title"`       // 商品标题
 	Name       string  `gorm:"name"`        // 商品名称
 	Price      float64 `gorm:"price"`       // 商品价格
-	Quantity   uint    `gorm:"quantity"`    // 商品数量
+	Quantity   int     `gorm:"quantity"`    // 商品数量
 	ImageUrl   string  `gorm:"image_url"`   // 商品图片
 	Remark     string  `gorm:"remark"`      // 商品备注
 	Sales      uint    `gorm:"sales"`       // 商品销量
